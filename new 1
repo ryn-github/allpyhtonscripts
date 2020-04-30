@@ -1,0 +1,40 @@
+#! python 3
+import os, shutil
+
+print('''enter the file type you want to backup
+example input : py, jpg, ps   etc
+''')
+
+# creates backup folder
+print('where do you want your files to be backed up')
+bkpfold = input
+filetype = input() #type of files to look for
+bakupnm = filetype+'_backup'
+bkppath = os.path.join(bkpfold, bakupnm) # stores backup directory
+
+if os.path.isdir(bkppath) == False :
+    os.makedirs(bkppath)
+
+print(r'''enter the file path where you want your files to be searched:
+example input  c:\\users\\etc
+dont forget the double backlash
+if want an entire drive to be searched, enter drive letter and semicolon and a slash
+example input  C:\\
+''')
+wertosearch = input() #location to search for filetype
+wertosearch = r"{}".format(wertosearch) # converts it into a raw string
+print(wertosearch)
+
+for fold, subf, file in os.walk(wertosearch):
+    subf[:] = [d for d in subf if not d.startswith('.')] #skips hidden folders
+    for i in range(len(file)): # iterating over the list of files 
+       
+        try:
+            if file[i].endswith('.'+filetype):
+                if os.path.isfile(os.path.join(bkppath, file[i])) == False: #checks if file is already present in backup folder
+                    shutil.copy(os.path.join(fold,file[i]),bkppath)
+        except FileNotFoundError:
+            print('NoT eXiSt')
+
+# todo
+# copy and paste in backup folder
